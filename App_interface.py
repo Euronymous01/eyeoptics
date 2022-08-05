@@ -4,12 +4,21 @@ from tkinter import *
 from tkinter import font as tkfont
 from tkinter.ttk import *
 import math
+from Plotfunction import *
 
 import numpy as np
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 # Implement the default Matplotlib key bindings.
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
+
+
+def lens_plot_area():
+    width = 500
+    heigth = 400
+    return width, heigth
+
+
 
 
 class App(tk.Tk):
@@ -90,31 +99,15 @@ class Lens(tk.Frame):
         b_back = tk.Button(self, text="Back to the Main Page",command=lambda: controller.up_frame('WelcomePage'))
         b_back.grid(sticky=W, pady=4, padx=5, row=1, column=0)
 
-
-
-
-        def function_coord():
-            x = np.linspace(0, 40, 41)
-            coords = []
-            x_increment = 1
-            center = 400/2
-            y_amplitude = -80
-            for i in range(len(x)):
-                coords.append(x[i] * x_increment)
-                coords.append(math.exp(x[i]) + 200)
-
-            return coords
-
-
-        coords = function_coord()
-
-
+       
         def lens_canvas():
 
-
-            canvas = Canvas(self, width=500, height=400, bg='white')
-
-            canvas.create_line(coords, fill="red", width=2)
+            width_lens, heigth_lens = lens_plot_area()
+            canvas = Canvas(self, width=width_lens, height=heigth_lens, bg='white')
+            #Definim niste coordonate x si y
+            #Chemamm functia Plot sau Plot0 din fisierul PlotFunction.py
+            #Plot(canvas, x , y, n)   ; n = numarul de elemente din x
+            
 
             canvas.grid(row=2, column=0, sticky=E + W + S + N, columnspan=2, rowspan=4,
                         padx=5, pady=5)
