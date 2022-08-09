@@ -8,7 +8,6 @@ from Plotfunction import *
 
 import numpy as np
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-# Implement the default Matplotlib key bindings.
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 
@@ -17,6 +16,7 @@ def lens_plot_area():
     width = 500
     heigth = 400
     return width, heigth
+    ### In mare parte appul va fi folosit in full screen
 
 
 
@@ -103,17 +103,27 @@ class Lens(tk.Frame):
         def lens_canvas():
 
             width_lens, heigth_lens = lens_plot_area()
-            canvas = Canvas(self, width=width_lens, height=heigth_lens, bg='white')
-            #Definim niste coordonate x si y
-            #Chemamm functia Plot sau Plot0 din fisierul PlotFunction.py
-            #Plot(canvas, x , y, n)   ; n = numarul de elemente din x
             
-
-            canvas.grid(row=2, column=0, sticky=E + W + S + N, columnspan=2, rowspan=4,
-                        padx=5, pady=5)
-
-
-
+            def plot():
+            
+                fig = Figure(figsize = (4,5), dpi=100)
+                
+                y = [i**2 * np.cos(i) for i in range(101)]
+                
+                plot1 = fig.add_subplot(111)
+                plot1.grid()
+                plot1.plot(y)
+                
+                canvas = FigureCanvasTkAgg(fig, self)
+                canvas.drew()
+                canvas.get_tk_widget().grid(row=2, column=0, sticky = 'nsew)
+                
+                toolbar = NavigationToolbar2Tk(canvas, self, pack_toolbar=False)
+                toolbar.update()
+                canvas._tkcanvas.grid()
+        
+                   
+            plot()
         lens_canvas()
 
         #Create a drop-off-menu for the lens type
