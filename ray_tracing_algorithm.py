@@ -406,19 +406,25 @@ Exemplu de utilizare:
 
 
 lens_aperture = 5
-asf = AsphericSurface(curvature=1/4, konic=0.25, z_0=0,
+asf = AsphericSurface(curvature=1/14, konic=0, z_0=0,
+                      aperture_radius=lens_aperture,
+                      A=0, B=0, record_rays=True, material_nr=2.5)
+bsf = AsphericSurface(curvature=1/13, konic=0, z_0=5,
+                      aperture_radius=lens_aperture,
+                      A=0, B=0, record_rays=True, material_nr=1.65)
+csf = AsphericSurface(curvature=1/13.5, konic=0, z_0=9.5,
                       aperture_radius=lens_aperture,
                       A=0, B=0, record_rays=True, material_nr=1.0)
-bsf = AsphericSurface(curvature=1/3, konic=0.35, z_0=5,
-                      aperture_radius=lens_aperture,
-                      A=0, B=0, record_rays=True, material_nr=1.0)
-csf = AsphericSurface(curvature=1/2, konic=0.45, z_0=9.5,
-                      aperture_radius=lens_aperture,
-                      A=0, B=0, record_rays=True, material_nr=1.0)
+dsf = AsphericSurface(curvature = 1/10, konic= -0.55 , z_0 = 15.5, aperture_radius = lens_aperture,
+                      A=0, B=0, record_rays=True, material_nr=2.43)
+esf = AsphericSurface(curvature = 1/14, konic = 0,
+                      z_0 = 19, aperture_radius = lens_aperture,
+                      A=0, B=0, record_rays=True, material_nr=2)
 
 
 
-ray_number = 10
+
+ray_number = 50
 y_start = np.linspace(-lens_aperture*0.8, lens_aperture*0.8, num=ray_number)
 x_start = np.ones_like(y_start) * (-2.0)
 theta = np.zeros_like(y_start)
@@ -429,12 +435,22 @@ rays = []
 
 fig,ax = plt.subplots()
 asf.render(ax)
+bsf.render(ax)
+csf.render(ax)
+dsf.render(xa)
+esf.render(ax)
 
 for i in range(y_start.shape[0]):
     ray_wavelength = 550
     ray = Ray(x_start[i], y_start[i], theta[i], ray_wavelength)
     rays.append(ray)
     asf.intersect(ray, t_min=0, t_max=100,prev_n=None)
-    ray.render_all(ax, time_of_flight=50)
+    bsf.intersect(ray, t_min=0, t_max=100,prev_n=None)
+    csf.intersect(ray, t_min=0, t_max=100,prev_n=None)
+    dsf.intersect(ray, t_min=0, t_max=100,prev_n=None)
+    esf.intersect(ray, t_min=0, t_max=100,prev_n=None)
+    ray.render_all(ax, time_of_flight=60)
 
+plt.tick_params(axis='x', which='both', bottom=True, top=True, labelbottom=True)
+plt.grid( True, which='both', axis='both', linestyle='--')
 plt.show()
